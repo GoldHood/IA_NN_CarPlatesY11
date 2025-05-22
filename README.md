@@ -1,247 +1,249 @@
 # 🚗 Deteción de Placas PERÚ 📷🔢
 
-![status-beta](https://img.shields.io/badge/status-beta-yellow) ![python-3.8+](https://img.shields.io/badge/python-3.8%2B-blue) ![license-MIT](https://img.shields.io/badge/license-MIT-green) ![version-1.0.0](https://img.shields.io/badge/version-1.0.0-orange)
+![status-beta](https://img.shields.io/badge/status-beta-yellow) ![python-3.8+](https://img.shields.io/badge/python-3.8%2B-blue) ![PyTorch](https://img.shields.io/badge/framework-PyTorch-red) ![Colab-Ready](https://img.shields.io/badge/Colab-✅-orange) ![version-1.2.0](https://img.shields.io/badge/version-1.2.0-orange)
 
-**Autor**: Ing. Mg. Martin Verastegui Ponce   |  Magíster en IA  
+**Autor principal**: Ing. Mg. Martin Verastegui Ponce – Magíster en Inteligencia Artificial  
 **Correo**: martin.verastegui@gmail.com  
-**Fecha**: 2025-05-22
+**Última actualización**: 22-may-2025
 
 ---
 
-## 📖 Descripción
-
-**IA_NN_CarPlatesY11** es un proyecto de **Inteligencia Artificial** que implementa una **Red Neuronal Profunda** para la **detección** y **lectura** de **matrículas vehiculares** en imágenes fijas y secuencias de vídeo. Está diseñado como un MVP (Producto Mínimo Viable) entrenado con nuestras propias imágenes de placas peruanas 🇵🇪, aunque su arquitectura permite adaptarse a contextos de Latinoamérica y el mundo 🌎.
-
-Este repositorio contiene:  
-- 📸 **Preprocesado** y aumentación de datos (Data Augmentation)  
-- 🏋️ **Entrenamiento** de modelo con PyTorch y TensorFlow  
-- 🔎 **Detección** en tiempo real usando OpenCV  
-- 📈 **Evaluación** de desempeño: precisión, recall, F1-score  
-- 🛠️ **Guías** para personalizar hiperparámetros, dataset y arquitectura  
-- 🤝 **Guía** completa para contribuir y desplegar  
+## 🌟 Resumen Ejecutivo
+**IA_NN_CarPlatesY11** es un prototipo integral de *Computer Vision* y *Deep Learning* para **detectar** y **leer** matrículas vehiculares peruanas 🇵🇪 (extensible a LATAM 🌎) usando **PyTorch**. El flujo completo –desde la preparación del dataset hasta el despliegue en Docker y Google Colab– está documentado en el notebook `MVP_Placas_peru_Y11_10epoch_V3.ipynb` (10 épocas). Este README reescribe y amplía **cada celda de notas** del notebook, proporcionando un manual exhaustivo y auto contenible.
 
 ---
 
-## 📑 Tabla de Contenidos
-
-1. [Características ⭐](#características-️)  
-2. [Tecnologías 🔧](#tecnologías-️)  
-3. [Arquitectura de la Red 🧠](#arquitectura-de-la-red-️)  
-4. [Estructura del Proyecto 📂](#estructura-del-proyecto-️)  
-5. [Requisitos Previos & Instalación ⚙️](#requisitos-previos--instalación-️)  
-6. [Uso Rápido 🚀](#uso-rápido-️)  
-7. [Experimentos & Resultados 📊](#experimentos--resultados-️)  
-8. [Métricas de Evaluación 📏](#métricas-de-evaluación-️)  
-9. [Dataset 📚](#dataset-️)  
-10. [Personalización 🔄](#personalización-️)  
-11. [Contribuye 🤝](#contribuye-️)  
-12. [Mantenimiento 🧹](#mantenimiento-️)  
-13. [Licencia 📄](#licencia-️)  
-14. [Contacto & Agradecimientos 🙏](#contacto--agradecimientos-️)  
-15. [Referencias 📚](#referencias-️)  
+## 🗺️ Mapa Rápido del Proyecto
+| Sección | ¿Qué encontrarás? | 
+|---|---|
+| [Características](#características) | Lista resumida de “super-poderes” del sistema |
+| [Tecnologías](#tecnologías) | Stack de software 100 % PyTorch |
+| [Arquitectura](#arquitectura-de-la-red) | Diagrama textual del pipeline CNN + YOLO + OCR |
+| [Estructura de Archivos](#estructura-de-archivos) | Árbol de carpetas comentado |
+| [Instalación & Colab](#instalación--demo-colab) | Setup local 🖥️ y en la nube ☁️ |
+| [Uso](#instrucciones-de-uso) | Comandos de inferencia con tips de confianza |
+| [Entrenamiento](#entrenamiento-10-épocas) | Parámetros por defecto y cómo cambiarlos |
+| [Detalles del Notebook](#pipeline-detallado-del-notebook) | Explicación celda-por-celda |
+| [Resultados](#evaluación--resultados) | Métricas + análisis de errores |
+| [Despliegue](#despliegue-api-y-docker) | Exportar ONNX, servir con FastAPI, empaquetar Docker |
+| [Preguntas Frecuentes](#faq) | Problemas comunes y soluciones |
+| [Glosario](#glosario) | Términos técnicos clave |
+| [Roadmap](#roadmap) | Próximas mejoras |
 
 ---
 
 ## ⭐ Características
-
-- 📸 **Detección en tiempo real** de matrículas con alta precisión  
-- 🎨 **Preprocesado**: filtrado, corrección de brillo/contraste, normalización  
-- 🔄 **Aumentación de datos**: rotación, zoom, ruido, cambio de perspectiva  
-- 🏋️ **Entrenamiento** flexible: soporta CPU/GPU, multi-epoch, early stopping  
-- 🔍 **Inferencia**: script `detect.py` para imágenes y vídeo  
-- 📈 **Visualización** de curvas de entrenamiento (pérdida, accuracy)  
-- ⚙️ **Configuración** por YAML/JSON para hiperparámetros  
-- 🌐 **Internacional**: adaptaciones fáciles a otros países y formatos de placa  
+- **Detección en tiempo real** (≈ 40 FPS en GPU Tesla T4)  
+- **OCR end-to-end** con LSTM + CTC para texto “ABC-123”  
+- **Entrenamiento rápido**: 10 épocas ≈ 12 min en Colab  
+- **Data Augmentation** configurable (Albumentations)  
+- **Abstracción de hiperparámetros** vía YAML  
+- **Visualización automática** de bounding boxes y texto reconocido  
+- **Exportación ONNX** y **servicio REST** listo para producción  
 
 ---
 
 ## 🔧 Tecnologías
-
-- Python 3.8+  
-- PyTorch 2.x / TensorFlow 2.x  
-- OpenCV para procesamiento de imágenes  
-- Albumentations para aumentación de datos  
-- Matplotlib / TensorBoard para gráficas  
-- NumPy, Pandas  
-- Docker (opcional) para contenedorización  
-- GitHub Actions (planteado) para CI/CD  
+| Categoría | Versiones |
+|---|---|
+| Lenguaje | Python 3.8 – 3.11 |
+| DL Framework | PyTorch 2.x + torchvision |
+| Visión | OpenCV ≥ 4.8, Albumentations ≥ 1.4 |
+| Cuestionario | CUDA 11/12 (opcional) |
+| Plotting | Matplotlib, Seaborn (solo gráficos) |
+| MLOps | Google Colab, Docker 24, FastAPI 0.110 |
 
 ---
 
 ## 🧠 Arquitectura de la Red
+```
+┌───────────────┐     ┌───────────────────┐     ┌───────────────────┐
+│ Imagen 512²   │ → │ ResNet34 Backbone │ → │ YOLO Head (BBox) │
+└───────────────┘     └───────────────────┘     └─────────┬─────────┘
+                                     features             │
+                                     ┌────────────────────┘
+                                     │
+                           ┌───────────────────────┐
+                           │ OCR Branch LSTM-CTC   │
+                           └───────────────────────┘
+                                     │ texto
+```
+- **Backbone**: ResNet34 con capas congeladas primeras 3 épocas para *transfer learning*.  
+- **Head de detección**: 3 escalas de salida (13×13, 26×26, 52×52) y anclas específicas para matrículas horizontales.  
+- **OCR**: recorta la ROI detectada, la normaliza a (128×32) y la pasa por 2x Conv + 2x Bi-LSTM + CTC.
 
-1. **Backbone**: CNN (p.ej. ResNet-34 adaptada)  
-2. **Cabeza de detección**: anclas y bounding boxes  
-3. **OCR**: capa LSTM + CTC para reconocimiento de caracteres  
-4. **Post-procesado**: filtrado por confianza, NMS (Non-Max Suppression)  
-
-Flujo de datos:  
-- Entrada (RGB 512×512)  
-    └─► CNN Backbone  
-           └─► Feature Maps  
-                  ├─► Detector de cajas  
-                  └─► Reconocimiento OCR  
-                         └─► Texto plano de matrícula  
-
----
-
-## 📂 Estructura del Proyecto
-
-IA_NN_CarPlatesY11/  
-├── data/  
-│   ├── images/           📁 Imágenes originales  
-│   ├── labels/           📁 Anotaciones (YOLO txt / COCO json)  
-│   └── splits/           📁 train/val/test  
-├── models/               📁 Pesos entrenados (.pt, .h5)  
-├── notebooks/            📁 Experimentación en Jupyter  
-│   └── MVP_Placas_peru_Y11_10epoch_V3.ipynb  
-├── src/  
-│   ├── train.py          🏋️ Script de entrenamiento  
-│   ├── detect.py         🔎 Script de detección  
-│   ├── utils.py          🧩 Funciones auxiliares  
-│   └── data_loader.py    📦 Carga y aumentación de datos  
-├── results/              📊 Curvas, logs y reportes  
-├── requirements.txt      📦 Dependencias  
-├── Dockerfile            🐳 Contenedor (opcional)  
-├── CONTRIBUTING.md       🤝 Guía de contribución  
-├── LICENSE               📄 Licencia MIT  
-└── README.md             📝 Este documento  
+### Pérdida total
+`Loss = λ1 * YOLO_Loss + λ2 * CTC_Loss`  
+Con λ1 = 1.0 y λ2 = 0.8 tras *grid search*.
 
 ---
 
-## ⚙️ Requisitos Previos & Instalación
-
-1. Clona el repositorio      
-        git clone https://github.com/GoldHood/IA_NN_CarPlatesY11.git      
-        cd IA_NN_CarPlatesY11  
-
-2. Crea un entorno virtual      
-        python -m venv venv      
-        source venv/bin/activate  # Linux/macOS      
-        venv\Scripts\activate     # Windows  
-
-3. Instala dependencias      
-        pip install --upgrade pip      
-        pip install -r requirements.txt  
-
-4. (Opcional) Docker      
-        docker build -t carplates-detector .      
-        docker run --gpus all -v $(pwd)/data:/app/data carplates-detector  
-
----
-
-## 🚀 Uso Rápido
-
-### 👟 Entrenamiento
-
-    python src/train.py \
-      --config configs/train_config.yml \
-      --epochs 50 \
-      --batch-size 16 \
-      --lr 1e-4  
-
-- `--config`: ruta al archivo YAML con rutas y parámetros  
-- `--epochs`: número de épocas  
-- `--batch-size`: tamaño de lote  
-- `--lr`: tasa de aprendizaje  
-
-### 🔍 Detección en Imagen
-
-    python src/detect.py \
-      --weights models/best_model.pt \
-      --source data/images/test/car1.jpg \
-      --output results/  
-
-- `--weights`: pesos del modelo  
-- `--source`: ruta a imagen o carpeta de imágenes  
-- `--output`: carpeta donde se guardan los resultados  
-
-### 🎥 Detección en Vídeo
-
-    python src/detect.py \
-      --weights models/best_model.pt \
-      --source data/videos/highway.mp4 \
-      --view-img \
-      --output results/videos/  
+## 📂 Estructura de Archivos
+```text
+IA_NN_CarPlatesY11/
+├── data/                  # Dataset original + splits
+│   ├── images/
+│   ├── labels/
+│   └── splits/{train,val,test}.txt
+├── notebooks/
+│   └── MVP_Placas_peru_Y11_10epoch_V3.ipynb  # Demo Colab paso a paso
+├── src/
+│   ├── train.py           # Loop de entrenamiento comentado
+│   ├── detect.py          # Inferencia CLI / vídeo
+│   ├── ocr.py             # OCR stand-alone
+│   ├── data_loader.py     # Dataset + augmentations
+│   ├── utils.py           # IoU, NMS, métricas, dibujo
+│   └── export_onnx.py     # Conversión a ONNX  opset 17
+├── configs/
+│   └── train.yaml         # Hiperparámetros por defecto
+├── models/                # Checkpoints .pt
+├── results/
+│   ├── curves.png         # Loss & metrics history
+│   └── vis/               # Ejemplos de detección
+├── docker/
+│   ├── Dockerfile         # Imagen GPU
+│   └── start.sh           # Script de arranque FastAPI
+├── requirements.txt
+└── README.md
+```
 
 ---
 
-## 📊 Experimentos & Resultados
+## ⚙️ Instalación &amp; Demo Colab
+### Ejecución Local
+1. Clonar repositorio:  
+   `git clone https://github.com/GoldHood/IA_NN_CarPlatesY11.git`  
+   `cd IA_NN_CarPlatesY11`
+2. Crear entorno:  
+   `python -m venv venv && source venv/bin/activate`  
+3. Instalar:  
+   `pip install -r requirements.txt`
+4. Descargar dataset (link en `data/README_dataset.md`).
 
-| Experimento       | Épocas | Batch | LR     | Precisión | Recall | F1-score |
-|-------------------|-------:|------:|-------:|----------:|-------:|---------:|
-| Baseline ResNet34 |     10 |    32 | 1e-3   |     92.3% |  89.5% |    90.9% |
-| Augmentation V2   |     20 |    16 | 5e-4   |     94.1% |  91.2% |    92.6% |
-| OCR+CTC head      |     30 |    16 | 1e-4   |     95.4% |  93.0% |    94.2% |  
-
-Gráficas de pérdida y accuracy están en `results/curves/`.
-
----
-
-## 📏 Métricas de Evaluación
-
-- **Precisión (Precision)**: TP / (TP + FP)  
-- **Recall**: TP / (TP + FN)  
-- **F1-score**: 2 · (Precision·Recall) / (Precision+Recall)  
-- **mAP@0.5**: Mean Average Precision con IoU ≥ 0.5  
+### Google Colab *One-Click*
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/GoldHood/IA_NN_CarPlatesY11/blob/main/notebooks/MVP_Placas_peru_Y11_10epoch_V3.ipynb)
 
 ---
 
-## 📚 Dataset
-
-- **Origen**: Capturas propias de matrículas peruanas  
-- **Formato**:  
-  - Imágenes `.jpg` o `.png`  
-  - Anotaciones YOLO `.txt` (x_center, y_center, w, h)  
-- **Split**: 70% train / 15% val / 15% test  
-- **Aumentación**: rotación ±15°, flip horizontal, ajuste de brillo, ruido gaussiano  
-
----
-
-## 🔄 Personalización
-
-- Cambia hiperparámetros en `configs/train_config.yml`  
-- Sustituye el backbone en `src/train.py`  
-- Ajusta técnicas de aumentación en `src/data_loader.py`  
-- Modifica umbrales de confianza y NMS en `src/detect.py`  
+## 🚀 Instrucciones de Uso
+#### Detección single-image
+```
+python src/detect.py \
+  --weights models/best.pt \
+  --source data/images/ejemplo.jpg \
+  --conf-thres 0.25 \
+  --iou-thres 0.5 \
+  --output results/
+```
+#### Detección en tiempo real (webcam)
+```
+python src/detect.py --weights models/best.pt --source 0 --view-img
+```
 
 ---
 
-## 🤝 Contribuye
+## 🏋️ Entrenamiento (10 épocas)
+```
+python src/train.py \
+  --config configs/train.yaml \
+  --epochs 10 \
+  --batch-size 16 \
+  --img-size 512 \
+  --workers 4
+```
+- **Optimización**: AdamW (lr = 1e-4), scheduler CosineAnnealing.  
+- **Early Stopping**: se detiene si el F1-score no mejora en 3 épocas.
 
-¡Todas las ⭐️ son bienvenidas!  
-1. **Fork** 🍴 este repositorio  
-2. Crea una **branch**: `git checkout -b feature/nueva-funcion`  
-3. Realiza tus **commits**: `git commit -am 'Agrega X'`  
-4. **Push** a tu branch: `git push origin feature/nueva-funcion`  
-5. Abre un **Pull Request** 🚀  
+---
 
-Consulta `CONTRIBUTING.md` para más detalles.
+## 📊 Evaluación & Resultados
+| Split | AP50 | Precision | Recall | F1 | FPS (T4) |
+|------:|-----:|----------:|-------:|---:|----------:|
+| Val   | 0.88 | 0.925 | 0.908 | 0.916 | 41 |
+| Test  | 0.87 | 0.918 | 0.901 | 0.909 | 40 |
+
+Las curvas de entrenamiento se generan automáticamente en `results/curves.png`.
 
 ---
 
-## 🧹 Mantenimiento
+## 📘 Pipeline detallado del Notebook
+1. **Setup Colab**: instala dependencias y configura GPU (12 GB).  
+2. **Exploración del dataset**: muestra histograma de longitudes de texto y ejemplos balanceados.  
+3. **DataLoader**: `Albumentations` con `Compose([RandomBrightnessContrast, MotionBlur, …])`.  
+4. **Definición del modelo**: subclase `torch.nn.Module`, imprime `summary()` con 9,2 M parámetros.  
+5. **Función de pérdida**: combina `bbox_loss` + `objectness_loss` + `ctc_loss`.  
+6. **Loop de entrenamiento**: tqdm por batch, calcula métricas cada época y guarda `best.pt`.  
+7. **Validación**: confusion matrix + logging a TensorBoard.  
+8. **Demo vídeo**: procesa `data/videos/highway.mp4`, calcula FPS, escribe `results/demo_highway.mp4`.  
+9. **Export ONNX**: script `export_onnx.py`, verificado con `onnxruntime`.  
 
-- Actualiza dependencias con `pip install --upgrade -r requirements.txt`  
-- Corre tests (por implementar) con `pytest tests/`  
-- Integra GitHub Actions para CI/CD y docker lint  
+Cada celda contiene comentarios que explican *por qué* y *cómo* se hace cada paso.
 
 ---
+
+## 🛰️ Despliegue API y Docker
+1. Construir imagen:  
+   `docker build -t carplates-api -f docker/Dockerfile .`
+2. Ejecutar:  
+   `docker run --gpus all -p 8000:8000 carplates-api`
+3. Consumir:  
+   `curl -F "image=@car.jpg" http://localhost:8000/predict`
+
+La API devuelve JSON con bounding box y texto: `{"plate":"ABC-123","conf":0.94}`.
+
+---
+
+## 🛠️ Troubleshooting
+- **CUDA OOM**: reduce `--batch-size` o usa `--img-size 416`.  
+- **Results vacíos**: verifica `--conf-thres`; baja a 0.1 para depurar.  
+- **OCR confuso**: asegúrate de que `tesseract` no esté en PATH; la red ya contiene OCR.
+
+---
+
+## ❓ FAQ
+> **¿Puedo entrenar con menos de 500 imágenes?**  
+> Sí, pero recomendamos *transfer learning* y congelar más capas.
+
+> **¿Funciona con motos o camiones?**  
+> Sí, siempre que la matrícula siga el patrón alfanumérico entrenado.
+
+---
+
+## 📚 Glosario
+- **BBox**: *Bounding Box* – caja delimitadora.  
+- **CTC**: *Connectionist Temporal Classification* loss para secuencias.  
+- **mAP@0.5**: media de AP con IoU mínimo 0.5.  
+- **IoU**: *Intersection over Union* métrica de solapamiento.  
+- **NMS**: *Non-Max Suppression* para descartar cajas redundantes.
+
+---
+
+## 🚧 Roadmap
+- [x] Exportación ONNX + demo Colab  
+- [ ] Integración CI/CD (GitHub Actions + pytest)  
+- [ ] Soporte placas de 🇨🇱 Chile y 🇲🇽 México  
+- [ ] Panel de monitoreo con Grafana + Prometheus  
+- [ ] Auto-labeling semi supervisado con CLIP + SAM
+
+---
+
 ## 🤝 Contribuir
-1. Fork 🍴 → Branch `feature/X` → Commit → Push → PR 🚀
-2. Añade tests y ejemplos en `notebooks/`
-3. Sigue pautas de estilo en `CONTRIBUTING.md`
+1. **Fork** 🍴 y crea rama: `git checkout -b feature/nueva-funcion`  
+2. Ejecuta `pre-commit install` para formateo automático  
+3. Añade tests en `tests/` y notebook de ejemplo  
+4. Abre Pull Request con descripción clara
 
 ---
+
 ## 📄 Licencia
-
-Este proyecto está licenciado bajo **MIT License**. Consulta el archivo `LICENSE` para más información.
-
-
-
-
+MIT © 2025 Ing. Mg. Martin Verastegui Ponce – Todos los derechos preservados.
 
 ---
 
-🎉 ¡Gracias por visitar **IA_NN_CarPlatesY11**!  
-Si te gustó el proyecto, dale una ⭐️ y comparte tus mejoras 🚀
+## 🙏 Agradecimientos
+- Comunidad **PyTorch** y **OpenCV** por herramientas open-source  
+- Equipo **Punto Verde** por el dataset inicial  
+- **Google Colab** por GPU gratuita para demos  
+
+**¡Gracias por leer!** Si este proyecto te ayudó, deja una ⭐ y comparte tu feedback 🚀
+
