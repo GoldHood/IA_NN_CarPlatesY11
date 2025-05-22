@@ -157,10 +157,87 @@ python src/train.py \
 ---
 
 ## 📊 Evaluación & Resultados
-| Split | AP50 | Precision | Recall | F1 | FPS (T4) |
-|------:|-----:|----------:|-------:|---:|----------:|
-| Val   | 0.88 | 0.925 | 0.908 | 0.916 | 41 |
-| Test  | 0.87 | 0.918 | 0.901 | 0.909 | 40 |
+
+## 📋 Evaluación Final del Modelo YOLOv11 sobre Validación en 100 Épocas 🧪
+
+El modelo ha sido evaluado usando el conjunto de validación especificado en `data.yaml`. A continuación se presentan y explican los resultados clave obtenidos tras 100 épocas de entrenamiento:
+
+---
+
+### 🧠 Métricas Generales:
+
+| Métrica                        | Valor   | Interpretación                                                                 |
+|-------------------------------|---------|-------------------------------------------------------------------------------|
+| `Precision`                   | **0.921** | De todas las placas que el modelo predijo, el **92.1%** fueron correctas.     |
+| `Recall`                      | **0.934** | El modelo detectó el **93.4%** de las placas reales en las imágenes.          |
+| `mAP@0.5`                     | **0.949** | Precisión promedio cuando el IoU ≥ 0.5. Muy alto → detecciones precisas.      |
+| `mAP@0.5:0.95`                | **0.692** | Promedio de mAP en 10 umbrales (de 0.5 a 0.95). Buen resultado, más exigente. |
+| `Fitness`                     | **0.718** | Valor global de ajuste del modelo (ponderación de todas las métricas).        |
+
+---
+
+### 📌 Clases Detectadas:
+
+| Clase   | Imágenes | Instancias | Precision | Recall | mAP@0.5 | mAP@0.5:0.95 |
+|---------|----------|------------|-----------|--------|---------|--------------|
+| `Placa` | 106      | 203        | 0.930     | 0.887  | 0.919   | 0.612        |
+| `placa` | 32       | 54         | 0.912     | 0.981  | 0.979   | 0.772        |
+
+> ⚠️ *Nota:* Se siguen identificando dos clases similares (`Placa` y `placa`). Se recomienda unificar estas etiquetas en el dataset para evitar confusiones y mejorar la coherencia de la evaluación.
+
+---
+
+## 📋 Evaluación del Modelo YOLOv11 — 22 Épocas 🧪
+
+Este modelo fue entrenado para la detección de placas peruanas. A continuación se presentan sus métricas clave evaluadas en el conjunto de validación:
+
+### 🧠 Métricas Generales:
+
+| Métrica        | Valor   | Significado |
+|----------------|---------|-------------|
+| `Precision`    | **0.888** | De todas las predicciones positivas, el 88.8% fueron verdaderas. |
+| `Recall`       | **0.907** | Detectó el 90.7% de las placas reales en las imágenes. |
+| `mAP@0.5`      | **0.927** | Alta precisión media cuando el IoU ≥ 0.5. |
+| `mAP@0.5:0.95` | **0.714** | Media de precisión bajo umbrales más estrictos (IoU de 0.5 a 0.95). |
+| `Fitness`      | **0.709** | Valor compuesto de rendimiento (considera todas las métricas anteriores). |
+
+---
+
+### 📌 Clases Detectadas:
+
+| Clase   | Imágenes | Instancias | Precision | Recall | mAP@0.5 | mAP@0.5:0.95 |
+|---------|----------|------------|-----------|--------|---------|--------------|
+| `placa` | 121      | 228        | 0.888     | 0.907  | 0.927   | 0.714        |
+
+> ✅ El modelo ya no tiene clases duplicadas como `Placa` y `placa`. Se logró una **unificación de clase**.
+
+---
+
+### ⚡ Velocidad de procesamiento:
+
+- **Preprocesamiento:** 2.5 ms / imagen
+- **Inferencia:** 4.2 ms / imagen
+- **Postproceso:** 3.0 ms / imagen
+
+---
+
+### ✅ Conclusiones
+
+- 🟢 El modelo muestra un **rendimiento sólido** tras solo 22 épocas de entrenamiento.
+- 🧪 Apto para **entornos en tiempo real** gracias a su baja latencia.
+- 📈 Se puede seguir mejorando con más ejemplos extremos o entrenamiento extendido.
+- 🔄 Ya se solucionó la duplicación de etiquetas (`Placa` vs `placa`).
+
+
+
+### ⚡ Velocidad de procesamiento:
+
+- **Preprocesamiento:** 2.4 ms / imagen
+- **Inferencia:** 4.2 ms / imagen
+- **Postproceso:** 3.0 ms / imagen
+
+✅ Ideal para **aplicaciones en tiempo real** sobre GPUs como Tesla T4.
+
 
 Las curvas de entrenamiento se generan automáticamente en `results/curves.png`.
 
